@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Personality Scanner — Main</title>
+  <title>Personality Scanner — HP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
     .font-display { font-family: 'Space Grotesk', sans-serif; }
@@ -15,7 +15,6 @@
 </head>
 <body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between p-4 selection:bg-cyan-500 selection:text-black">
 
-  <!-- Header Ringkas HP -->
   <header class="py-2 border-b border-slate-800/80 flex justify-between items-center">
     <div class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -34,9 +33,9 @@
         </svg>
       </div>
       <h2 class="text-2xl font-black text-white font-display mb-1">MASUKKAN NAMA</h2>
-      <p class="text-xs text-slate-400 mb-6">Hasil scan kamu akan langsung muncul di proyektor!</p>
+      <p class="text-xs text-slate-400 mb-6">Hasil scan kepribadian kamu akan dianalisis dan dibahas bersama!</p>
       
-      <input id="player-name" type="text" placeholder="Ketik nama panggilan kamu..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-semibold text-center focus:outline-none focus:border-cyan-400 mb-4 shadow-inner" />
+      <input id="player-name" type="text" placeholder="Ketik nama panggilan..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-semibold text-center focus:outline-none focus:border-cyan-400 mb-4 shadow-inner" />
       <button onclick="submitName()" class="w-full py-3.5 bg-cyan-400 text-slate-900 font-bold rounded-xl active:scale-95 transition-transform shadow-lg shadow-cyan-400/20 tracking-wider text-sm">
         MULAI SCAN (8 SOAL)
       </button>
@@ -54,14 +53,12 @@
         </div>
       </div>
 
-      <!-- Opsi A (Kiri) -->
       <button onclick="chooseOption('left')" class="p-5 rounded-2xl border border-slate-800 bg-slate-900 text-left active:bg-cyan-950 active:border-cyan-400 transition-all flex flex-col justify-between h-[175px] shadow-lg">
         <span class="text-[10px] font-mono font-bold text-cyan-400 uppercase bg-cyan-950/80 border border-cyan-800/60 px-2.5 py-0.5 rounded w-fit">Opsi A</span>
         <p id="opt-left-text" class="text-base font-bold text-white leading-snug"></p>
         <span class="text-xs text-cyan-400/80 font-semibold self-end">Pilih Opsi Ini →</span>
       </button>
 
-      <!-- Opsi B (Kanan) -->
       <button onclick="chooseOption('right')" class="p-5 rounded-2xl border border-slate-800 bg-slate-900 text-left active:bg-blue-950 active:border-blue-400 transition-all flex flex-col justify-between h-[175px] shadow-lg">
         <span class="text-[10px] font-mono font-bold text-blue-400 uppercase bg-blue-950/80 border border-blue-800/60 px-2.5 py-0.5 rounded w-fit">Opsi B</span>
         <p id="opt-right-text" class="text-base font-bold text-white leading-snug"></p>
@@ -69,28 +66,54 @@
       </button>
     </div>
 
-    <!-- STEP 3: RESULT REVEAL DI HP -->
-    <div id="view-result" class="w-full max-w-sm hidden text-center">
-      <div class="p-6 rounded-3xl border border-slate-800 bg-slate-900/90 shadow-2xl relative overflow-hidden">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950 border border-cyan-800 px-3 py-1 rounded-full">
-          HASIL KEPRIBADIANMU
-        </span>
+    <!-- STEP 3: HASIL LENGKAP KEPRIBADIAN, KEKUATAN, KELEMAHAN, JURUSAN -->
+    <div id="view-result" class="w-full max-w-sm hidden text-left py-2">
+      <div class="p-6 rounded-3xl border border-slate-800 bg-slate-900/95 shadow-2xl relative">
         
-        <h3 id="res-archetype" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 font-display mt-3 mb-1"></h3>
-        <p id="res-subtitle" class="text-xs text-slate-400 font-mono uppercase mb-4"></p>
-
-        <div class="bg-slate-950 border border-slate-800/80 p-4 rounded-xl text-left text-xs mb-4">
-          <p class="text-slate-300 font-semibold mb-1">Jurusan Institut Asia yang cocok buat kamu:</p>
-          <p id="res-majors" class="text-cyan-300 font-bold text-sm"></p>
+        <div class="text-center mb-5">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950 border border-cyan-800 px-3 py-1 rounded-full">
+            HASIL ANALISIS KEPRIBADIAN
+          </span>
+          <h3 id="res-archetype" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 font-display mt-2 mb-1"></h3>
+          <p id="res-subtitle" class="text-xs text-slate-400 font-mono uppercase"></p>
         </div>
 
-        <p id="save-status" class="text-xs text-slate-400 font-mono mb-4 flex items-center justify-center gap-1.5">
-          <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Mengirim ke layar proyektor...
+        <!-- Uraian Karakter Singkat -->
+        <p id="res-desc" class="text-xs text-slate-300 leading-relaxed mb-4 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800"></p>
+
+        <!-- Kekuatan & Kelemahan -->
+        <div class="space-y-2.5 mb-4 text-xs">
+          <div class="bg-emerald-950/40 border border-emerald-500/30 p-3 rounded-xl">
+            <p class="font-bold text-emerald-400 uppercase tracking-wide mb-0.5">⚡ Kekuatan Utama:</p>
+            <p id="res-strength" class="text-slate-200 leading-relaxed"></p>
+          </div>
+
+          <div class="bg-amber-950/40 border border-amber-500/30 p-3 rounded-xl">
+            <p class="font-bold text-amber-400 uppercase tracking-wide mb-0.5">⚠️ Titik Buta / Kelemahan:</p>
+            <p id="res-weakness" class="text-slate-200 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <!-- Punchline Insight -->
+        <div class="p-3.5 rounded-xl bg-cyan-950/30 border-l-2 border-cyan-400 border-y border-r border-slate-800 mb-4">
+          <p class="text-[10px] font-mono uppercase text-cyan-300 font-bold mb-0.5">INSIGHT KUNCI</p>
+          <p id="res-insight" class="text-slate-200 text-xs italic leading-relaxed"></p>
+        </div>
+
+        <!-- Rekomendasi Jurusan -->
+        <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl text-xs mb-5">
+          <p class="text-slate-400 font-semibold mb-1">Arah Jurusan Terbaik di Institut Asia:</p>
+          <p id="res-majors" class="text-cyan-300 font-bold text-sm leading-snug"></p>
+        </div>
+
+        <p id="save-status" class="text-[11px] text-center text-slate-400 font-mono mb-4 flex items-center justify-center gap-1.5">
+          <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Mengirim ke proyektor...
         </p>
 
-        <a href="https://asia.ac.id" target="_blank" class="block w-full py-3.5 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-cyan-400/20 transition-colors">
-          Lihat Program Studi di Asia
+        <a href="https://asia.ac.id" target="_blank" class="block w-full py-3.5 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-bold rounded-xl text-xs uppercase tracking-wider text-center shadow-lg shadow-cyan-400/20">
+          Pelajari Jurusan Ini di Asia
         </a>
+
       </div>
     </div>
 
@@ -101,7 +124,6 @@
   </footer>
 
   <script>
-    // URL Google Apps Script Anda
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyeBih6XjCoBUlnsHn2sFmTB0ecqbRjRTH40SyCykPaazG0wT7UyeGhwLbNSE7Z_aLo/exec";
 
     let playerName = "";
@@ -119,17 +141,57 @@
       { left: { text: "Puas kalau orang lain terbantu", traits: { sosial: 2, leadership: 1 } }, right: { text: "Puas kalau target tercapai", traits: { leadership: 2, analitis: 1 } } }
     ];
 
-    const archetypes = {
-      analitis: { name: "THE STRATEGIST", subtitle: "Analitis • Terstruktur", majors: "S1 Manajemen Bisnis & Akuntansi" },
-      teknikal: { name: "THE BUILDER", subtitle: "Teknikal • Problem Solver", majors: "S1 Informatika & Rekayasa Komputer" },
-      kreatif: { name: "THE STORYTELLER", subtitle: "Kreatif • Visual Thinker", majors: "S1 Desain Komunikasi Visual (DKV)" },
-      sosial: { name: "THE CONNECTOR", subtitle: "Sosial • Empatik", majors: "S1 Komunikasi & Marketing Digital" },
-      leadership: { name: "THE CATALYST", subtitle: "Leadership • Action-Driven", majors: "S1 Bisnis Digital & Manajemen" }
+    const archetypeDetails = {
+      analitis: {
+        name: "THE STRATEGIST",
+        subtitle: "Analitis • Terstruktur",
+        desc: "Kamu adalah tipe pemikir helikopter. Kamu melihat pola besar sebelum orang lain menyadarinya dan selalu butuh alasan logis di balik setiap tindakan.",
+        strength: "Perencanaan jangka panjang terstruktur, jago membaca data, dan objektif dalam menilai situasi rumit.",
+        weakness: "Sering terjebak overthinking dan ragu melangkah jika datanya belum 100% lengkap.",
+        insight: "Yang kamu butuhkan bukan jurusan teori lambat, tapi lingkungan yang melatih kamu berani mengambil keputusan cepat di dunia bisnis nyata.",
+        majors: "S1 Manajemen Bisnis, S1 Akuntansi Bisnis Digital"
+      },
+      teknikal: {
+        name: "THE BUILDER",
+        subtitle: "Teknikal • Problem Solver",
+        desc: "Kamu tipe arsitek logika. Kamu lebih percaya pada sistem yang teruji dan bukti nyata daripada sekadar janji atau obrolan manis.",
+        strength: "Logika pemecahan masalah yang kokoh, tekun mencari 'bug', dan mampu mewujudkan ide jadi produk nyata.",
+        weakness: "Cepat jenuh pada diskusi tanpa eksekusi dan kadang kurang sabar saat harus berdiplomasi dengan orang non-teknis.",
+        insight: "Kamu butuh ekosistem laboratorium yang bebas dari teori usang dan langsung menghadapkanmu pada tantangan ngoding/hardware masa depan.",
+        majors: "S1 Informatika, S1 Sistem & Teknologi Rekayasa"
+      },
+      kreatif: {
+        name: "THE STORYTELLER",
+        subtitle: "Kreatif • Visual Thinker",
+        desc: "Kamu memproses dunia melalui estetika, rasa, dan cerita visual. Sudut pandangmu selalu unik dan segar dibanding orang kebanyakan.",
+        strength: "Sensitivitas visual tinggi, imajinasi orisinal, serta kemampuan mengomunikasikan rasa lewat karya visual.",
+        weakness: "Produktivitas sangat dipengaruhi mood dan gampang kehilangan minat pada hal administratif yang kaku.",
+        insight: "Dunia butuh bakat visualmu! Kamu perlu jurusan yang mengasah ide liarmu menjadi karya komersial yang dihargai mahal oleh industri kreatif.",
+        majors: "S1 Desain Komunikasi Visual (DKV), Desain Multimedia"
+      },
+      sosial: {
+        name: "THE CONNECTOR",
+        subtitle: "Sosial • Empatik",
+        desc: "Kekuatan terbesarmu ada pada manusia. Kamu punya empati alami untuk memahami isi kepala orang dan menyelaraskan berbagai perbedaan.",
+        strength: "Empati tinggi, lihai membangun koneksi dan jaringan, serta komunikator ulung saat kerja tim.",
+        weakness: "Sulit menolak permintaan orang lain (sering sungkan) dan terkadang menghindari konfrontasi penting demi menjaga keharmonisan.",
+        insight: "Di era AI, skill sosial adalah yang paling tak tergantikan. Kembangkan talentamu di bidang yang mengasah negosiasi dan pengaruh massa.",
+        majors: "S1 Komunikasi Digital, Public Relations & Digital Marketing"
+      },
+      leadership: {
+        name: "THE CATALYST",
+        subtitle: "Leadership • Action-Driven",
+        desc: "Kamu adalah motor penggerak. Saat suasana pasif, energimu otomatis mengambil kendali untuk membuat semua orang mulai bergerak mencapai target.",
+        strength: "Inisiatif tinggi, berani mengambil risiko, serta memiliki karisma alami untuk mendorong orang lain.",
+        weakness: "Cenderung tidak sabaran dan cepat bosan begitu proyek sudah masuk tahap pemeliharaan rutin.",
+        insight: "Insting kepemimpinanmu butuh arena nyata. Kamu cocok di lingkungan yang langsung menantangmu membangun proyek bisnis dan startup sejak kuliah.",
+        majors: "S1 Bisnis Digital, S1 Manajemen Kewirausahaan"
+      }
     };
 
     function submitName() {
       const input = document.getElementById('player-name').value.trim();
-      if (!input) return alert("Silakan masukkan nama kamu terlebih dahulu!");
+      if (!input) return alert("Silakan masukkan nama kamu dulu ya!");
       playerName = input;
       document.getElementById('view-name').classList.add('hidden');
       document.getElementById('view-quiz').classList.remove('hidden');
@@ -165,15 +227,21 @@
         if (sc > maxScore) { maxScore = sc; topTrait = trait; }
       }
 
-      const result = archetypes[topTrait];
+      const res = archetypeDetails[topTrait];
 
+      // Render di Layar HP
       document.getElementById('view-quiz').classList.add('hidden');
       document.getElementById('view-result').classList.remove('hidden');
-      document.getElementById('res-archetype').innerText = result.name;
-      document.getElementById('res-subtitle').innerText = result.subtitle;
-      document.getElementById('res-majors').innerText = result.majors;
+      
+      document.getElementById('res-archetype').innerText = res.name;
+      document.getElementById('res-subtitle').innerText = res.subtitle;
+      document.getElementById('res-desc').innerText = res.desc;
+      document.getElementById('res-strength').innerText = res.strength;
+      document.getElementById('res-weakness').innerText = res.weakness;
+      document.getElementById('res-insight').innerText = `"${res.insight}"`;
+      document.getElementById('res-majors').innerText = res.majors;
 
-      // Kirim hasil ke Google Sheets via POST
+      // Kirim hasil ke Google Sheets
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
@@ -181,10 +249,10 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: playerName,
-            archetype: result.name
+            archetype: res.name
           })
         });
-        document.getElementById('save-status').innerHTML = `<span class="text-emerald-400 font-bold">✓ Data kamu sudah masuk ke layar proyektor!</span>`;
+        document.getElementById('save-status').innerHTML = `<span class="text-emerald-400 font-bold">✓ Profil kamu sudah masuk ke layar depan!</span>`;
       } catch (err) {
         document.getElementById('save-status').innerText = "Tersimpan.";
       }
