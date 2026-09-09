@@ -83,7 +83,7 @@
           <div class="inline-block text-[11px] font-mono uppercase tracking-wider text-cyan-400 bg-[#072432]/90 border border-cyan-700/60 px-4 py-1.5 rounded-full mb-3 shadow-inner">
             SPOTLIGHT PROFIL PESERTA
           </div>
-          <h2 id="res-player-name" class="text-3xl font-extrabold text-white tracking-tight leading-tight">Neon sign</h2>
+          <h2 id="res-player-name" class="text-3xl font-extrabold text-white tracking-tight leading-tight">Nama Peserta</h2>
           <p id="res-archetype" class="text-xl font-extrabold text-cyan-400 font-display mt-1">THE STRATEGIST</p>
         </div>
 
@@ -161,35 +161,35 @@
         strength: "Sangat piawai menyusun strategi jangka panjang, membaca arah tren, dan merancang perencanaan yang terstruktur.",
         weakness: 'Sering terjebak di "overthinking" (analysis paralysis). Terlalu banyak bikin plan sampai sering menunda langkah eksekusi nyata.',
         insight: '"Yang kamu butuhkan bukan jurusan teori yang lambat, tapi lingkungan yang melatih kamu mengambil keputusan cepat di bawah tekanan."',
-        majors: "S1 Manajemen Bisnis, S1 Akuntansi Bisnis Digital"
+        majors: "Akuntansi, Professional Business Management"
       },
       teknikal: {
         name: "THE BUILDER",
         strength: "Logika problem-solving tajam, tekun mencari solusi teknis, dan sangat senang menciptakan produk nyata yang berfungsi.",
         weakness: "Cepat bosan dengan obrolan teoritis/diplomatis, dan terkadang kurang sabar ketika harus menjelaskan hal teknis ke orang awam.",
         insight: '"Kamu bakal layu kalau cuma disuruh menghafal materi. Kamu butuh ekosistem laboratorium yang membebaskanmu ngoprek, ngoding, dan tes produk langsung."',
-        majors: "S1 Informatika, S1 Sistem & Teknologi Rekayasa"
+        majors: "Teknik Informatika, Sistem Komputer"
       },
       kreatif: {
         name: "THE STORYTELLER",
         strength: "Pikiran visual luar biasa, daya imajinasi tinggi, dan peka terhadap emosi audiens melalui karya estetika/kreatif.",
         weakness: "Mood-driven (kinerja bergantung suasana hati) dan mudah frustrasi jika dibatasi dengan regulasi yang terlalu kaku.",
         insight: '"Bakat kreatifmu butuh wadah industri nyata. Kamu perlu jurusan yang mengasah estetikamu jadi portofolio komersial bernilai tinggi."',
-        majors: "S1 Desain Komunikasi Visual (DKV), Desain Multimedia"
+        majors: "Desain Komunikasi Visual"
       },
       sosial: {
         name: "THE CONNECTOR",
         strength: "Kecerdasan emosional tinggi, mudah beradaptasi, ahli menjalin relasi, dan mampu menyatukan berbagai karakter orang.",
         weakness: "Cenderung menghindari konflik langsung (people-pleaser) dan kadang kesulitan fokus pada pekerjaan detail sendirian.",
-        insight: '"Teknologi secanggih apa pun butuh manusia yang menyampaikannya. Nilai jualmu ada di kemampuan negosiasi dan komunikasi massa."',
-        majors: "S1 Komunikasi Digital, Public Relations & Digital Marketing"
+        insight: '"Teknologi secanggih apa pun butuh manusia yang menyampaikannya. Nilai jualmu ada di kemampuan negosiasi dan komunikasi bisnis global."',
+        majors: "Professional Business Management, International Business Management"
       },
       leadership: {
         name: "THE CATALYST",
-        strength: "Inisiatif tinggi, berani mengambil risiko terukur, proaktif, dan selalu punya dorongan kuat untuk mengubah ide jadi gerakan.",
+        strength: "Inisiatif tinggi, berani mengambil risiko terukur, proaktif, dan selalu punya dorongan kuat untuk mengubah ide jadi gerakan nyata.",
         weakness: "Cenderung impulsif, mudah bosan pada urusan administrasi rutin setelah proyek berjalan stabil.",
-        insight: '"Kamu butuh tempat yang tidak mengekang insting kewirausahaanmu. Jurusan yang tepat adalah yang langsung menantangmu membangun proyek bisnis sejak kuliah."',
-        majors: "S1 Bisnis Digital, S1 Manajemen Kewirausahaan"
+        insight: '"Kamu butuh tempat yang tidak mengekang insting kepemimpinanmu. Jurusan yang tepat adalah yang langsung menantangmu membangun proyek bisnis & inovasi teknologi sejak kuliah."',
+        majors: "International Business Management, Teknik Informatika"
       }
     };
 
@@ -233,7 +233,6 @@
 
       const res = archetypeDetails[topTrait];
 
-      // Tampilkan Tampilan Hasil HP yang Presisi Sesuai Gambar
       document.getElementById('view-quiz').classList.add('hidden');
       document.getElementById('view-result').classList.remove('hidden');
       
@@ -244,7 +243,6 @@
       document.getElementById('res-insight').innerText = res.insight;
       document.getElementById('res-majors').innerText = res.majors;
 
-      // Kirim hasil ke Google Sheets API
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
