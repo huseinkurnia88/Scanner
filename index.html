@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Host Dashboard — Jurusan Scanner</title>
+  <title>Host Live Arena — Institut Asia Malang</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
     }
   </style>
 </head>
-<body class="bg-[#0b0f19] text-slate-100 min-h-screen p-6 md:p-10 flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black bg-grid">
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen p-6 md:p-8 flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black bg-grid">
 
   <!-- Glow Background Effect -->
   <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
@@ -28,81 +28,191 @@
     <div class="absolute bottom-10 -right-20 w-96 h-96 bg-blue-600/15 rounded-full blur-[140px]"></div>
   </div>
 
-  <!-- Header Arena -->
-  <header class="flex justify-between items-center border-b border-slate-800/80 pb-5 max-w-7xl mx-auto w-full">
+  <!-- Header -->
+  <header class="flex justify-between items-center border-b border-slate-800/80 pb-4 max-w-7xl mx-auto w-full">
     <div class="flex items-center gap-3">
       <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
       <div>
-        <h1 class="text-xl md:text-2xl font-black tracking-wider font-display uppercase text-white">LIVE SCANNER ARENA</h1>
+        <h1 class="text-xl md:text-2xl font-black tracking-wider font-display uppercase text-white">LIVE PERSONALITY ARENA</h1>
         <p class="text-xs text-slate-400 font-mono">INSTITUT ASIA MALANG</p>
       </div>
     </div>
-    <div class="bg-slate-900/90 border border-slate-700/80 px-5 py-2.5 rounded-2xl text-right shadow-lg">
-      <span class="text-[11px] text-slate-400 block uppercase font-mono tracking-wider">Total Responden</span>
-      <span id="total-count" class="text-2xl md:text-3xl font-black text-cyan-400 font-mono leading-none">0</span>
+    <div class="flex items-center gap-4">
+      <div class="bg-slate-900/90 border border-slate-700/80 px-4 py-2 rounded-2xl text-right">
+        <span class="text-[10px] text-slate-400 block uppercase font-mono tracking-wider">Total Responden</span>
+        <span id="total-count" class="text-2xl font-black text-cyan-400 font-mono">0</span>
+      </div>
     </div>
   </header>
 
-  <!-- Main Content Arena -->
-  <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto py-6 items-center max-w-7xl mx-auto w-full">
+  <!-- Main Grid -->
+  <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-6 max-w-7xl mx-auto w-full">
     
     <!-- Kolom Kiri: QR Code Box -->
-    <div class="lg:col-span-4 bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl text-center shadow-2xl relative">
-      <div class="inline-block text-[11px] font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950/80 border border-cyan-800/80 px-3 py-1 rounded-full mb-3">
-        GABUNG DARI HP
+    <div class="lg:col-span-4 bg-slate-900/90 border border-slate-800 p-6 rounded-3xl text-center shadow-2xl flex flex-col justify-between">
+      <div>
+        <div class="inline-block text-[11px] font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950/80 border border-cyan-800/80 px-3 py-1 rounded-full mb-3">
+          GABUNG DARI HP
+        </div>
+        <h2 class="text-xl font-black font-display text-white mb-1">SCAN QR UNTUK MAIN</h2>
+        <p class="text-slate-400 text-xs mb-4">Pilih jawaban dalam 60 detik</p>
+        <div class="bg-white p-3 rounded-2xl inline-block shadow-inner mx-auto mb-4" id="qrcode"></div>
       </div>
-      <h2 class="text-2xl font-black font-display text-white mb-1">SCAN QR UNTUK MAIN</h2>
-      <p class="text-slate-400 text-xs mb-5">Arahkan kamera HP untuk mulai kuis 60 detik</p>
-
-      <!-- QR Container -->
-      <div class="bg-white p-3.5 rounded-2xl inline-block shadow-inner mx-auto mb-4" id="qrcode"></div>
-      
-      <div class="bg-slate-950/80 border border-slate-800/90 p-3 rounded-xl">
-        <p class="text-[11px] text-slate-400 font-mono">Sinkronisasi Spreadsheet: <span id="sync-status" class="text-emerald-400 font-bold">Aktif</span></p>
+      <div class="bg-slate-950/80 border border-slate-800/90 p-3 rounded-xl text-xs font-mono text-slate-400">
+        Status Server: <span id="sync-status" class="text-emerald-400 font-bold">Terhubung</span>
       </div>
     </div>
 
-    <!-- Kolom Kanan: Live Realtime Aggregation -->
-    <div class="lg:col-span-8 space-y-4">
-      <div>
-        <h3 class="text-2xl font-black font-display text-white tracking-wide">PETA KEPRIBADIAN AUDIENS</h3>
-        <p class="text-xs text-slate-400">Data ter-update otomatis dari Google Sheets setiap 2.5 detik.</p>
+    <!-- Kolom Kanan: Distribusi & Live Attendees Cards -->
+    <div class="lg:col-span-8 space-y-6">
+      
+      <!-- Distribusi Bar Arketipe -->
+      <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-3xl">
+        <h3 class="text-lg font-black font-display text-white tracking-wide mb-3">DISTRIBUSI KELAS</h3>
+        <div id="archetype-list" class="grid grid-cols-1 gap-2.5"></div>
       </div>
 
-      <!-- Container Bar Arketipe -->
-      <div id="archetype-list" class="grid grid-cols-1 gap-3.5">
-        <!-- Render Otomatis via JS -->
+      <!-- Live Attendee Feed: Klik Kartu Nama untuk Spotlight -->
+      <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-3xl">
+        <div class="flex justify-between items-center mb-3">
+          <div>
+            <h3 class="text-lg font-black font-display text-white tracking-wide">HASIL PESERTA (LIVE FEED)</h3>
+            <p class="text-xs text-slate-400">Klik nama peserta di bawah untuk bedah profil & hasil secara mendalam di panggung!</p>
+          </div>
+          <span class="text-[11px] font-mono bg-cyan-950 border border-cyan-800/80 text-cyan-300 px-2.5 py-1 rounded-lg animate-pulse">Live</span>
+        </div>
+
+        <div id="attendees-feed" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-1">
+          <p class="text-xs text-slate-500 italic py-2">Menunggu audiens menyelesaikan scan...</p>
+        </div>
       </div>
+
     </div>
 
   </main>
 
-  <!-- Footer Proyektor -->
+  <!-- MODAL SPOTLIGHT (TAMPIL BESAR KETIKA NAMA DIKLIK) -->
+  <div id="spotlight-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative overflow-hidden">
+      <!-- Close Button -->
+      <button onclick="closeSpotlight()" class="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-xl text-xs font-mono">
+        ✕ TUTUP (ESC)
+      </button>
+
+      <div class="text-center mb-6">
+        <span class="text-xs font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950 border border-cyan-800 px-3.5 py-1 rounded-full">
+          SPOTLIGHT PROFIL PESERTA
+        </span>
+        <h2 id="modal-attendee-name" class="text-3xl md:text-4xl font-black text-white font-display mt-2">Nama Peserta</h2>
+        <p id="modal-archetype-tag" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 font-display mt-1">THE STRATEGIST</p>
+      </div>
+
+      <!-- Strengths & Weaknesses Split -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-xs">
+        <div class="bg-emerald-950/30 border border-emerald-500/30 p-4 rounded-2xl">
+          <p class="font-bold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <span>⚡</span> KEKUATAN UTAMA
+          </p>
+          <p id="modal-strength" class="text-slate-200 leading-relaxed"></p>
+        </div>
+
+        <div class="bg-amber-950/30 border border-amber-500/30 p-4 rounded-2xl">
+          <p class="font-bold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <span>⚠️</span> TITIK BUTA / KELEMAHAN
+          </p>
+          <p id="modal-weakness" class="text-slate-200 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Insight Punchline -->
+      <div class="p-4 rounded-2xl bg-cyan-950/40 border border-cyan-800/80 mb-5">
+        <p class="text-[11px] font-mono uppercase text-cyan-300 font-bold mb-1">PUNCHLINE INSIGHT</p>
+        <p id="modal-insight" class="text-slate-200 text-sm italic leading-relaxed"></p>
+      </div>
+
+      <!-- Major Direction -->
+      <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-3">
+        <div>
+          <p class="text-[11px] font-mono text-slate-400 uppercase">Arah Jurusan Terbaik di Institut Asia:</p>
+          <p id="modal-majors" class="text-base font-bold text-cyan-300"></p>
+        </div>
+        <a href="https://asia.ac.id" target="_blank" class="px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-bold text-xs rounded-xl whitespace-nowrap">
+          Lihat Info Kampus
+        </a>
+      </div>
+    </div>
+  </div>
+
   <footer class="text-center text-xs text-slate-500 font-mono border-t border-slate-900 pt-4 max-w-7xl mx-auto w-full flex justify-between items-center">
-    <span>Platform Interaktif Booth & Presentasi Institut Asia</span>
-    <span class="text-[10px] text-slate-600">Auto-refresh 2500ms</span>
+    <span>Platform Presentasi Interaktif — Institut Asia Malang</span>
+    <span class="text-[10px] text-slate-600">Sinkronisasi Realtime</span>
   </footer>
 
   <script>
-    // URL Google Apps Script Anda
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyeBih6XjCoBUlnsHn2sFmTB0ecqbRjRTH40SyCykPaazG0wT7UyeGhwLbNSE7Z_aLo/exec";
 
-    const archetypeMeta = {
-      'THE STRATEGIST': { subtitle: 'S1 Manajemen / Bisnis', color: 'from-cyan-500 to-blue-600' },
-      'THE BUILDER': { subtitle: 'S1 Informatika / Rekayasa', color: 'from-emerald-400 to-teal-600' },
-      'THE STORYTELLER': { subtitle: 'S1 Desain Komunikasi Visual (DKV)', color: 'from-fuchsia-500 to-pink-600' },
-      'THE CONNECTOR': { subtitle: 'S1 Komunikasi / Digital PR', color: 'from-amber-400 to-orange-500' },
-      'THE CATALYST': { subtitle: 'S1 Bisnis Digital & Startup', color: 'from-indigo-400 to-purple-600' }
+    // Profil Lengkap Arketipe (Uraian Kepribadian, Kelebihan, Kelemahan, Insight, Jurusan)
+    const archetypeData = {
+      'THE STRATEGIST': {
+        name: 'THE STRATEGIST',
+        subtitle: 'S1 Manajemen / Bisnis',
+        color: 'from-cyan-500 to-blue-600',
+        badgeColor: 'border-cyan-500/40 bg-cyan-950/50 text-cyan-300 hover:border-cyan-400',
+        strength: 'Sangat piawai menyusun strategi jangka panjang, membaca arah tren, dan merancang perencanaan yang terstruktur.',
+        weakness: 'Sering terjebak di "overthinking" (analysis paralysis). Terlalu banyak bikin plan sampai sering menunda langkah eksekusi nyata.',
+        insight: 'Yang kamu butuhkan bukan jurusan teori yang lambat, tapi lingkungan yang melatih kamu mengambil keputusan cepat di bawah tekanan.',
+        majors: 'S1 Manajemen Bisnis, S1 Akuntansi Bisnis Digital'
+      },
+      'THE BUILDER': {
+        name: 'THE BUILDER',
+        subtitle: 'S1 Informatika / Rekayasa',
+        color: 'from-emerald-400 to-teal-600',
+        badgeColor: 'border-emerald-500/40 bg-emerald-950/50 text-emerald-300 hover:border-emerald-400',
+        strength: 'Logika problem-solving tajam, tekun mencari solusi teknis, dan sangat senang menciptakan produk nyata yang berfungsi.',
+        weakness: 'Cepat bosan dengan obrolan teoritis/diplomatis, dan terkadang kurang sabar ketika harus menjelaskan hal teknis ke orang awam.',
+        insight: 'Kamu bakal layu kalau cuma disuruh menghafal materi. Kamu butuh ekosistem laboratorium yang membebaskanmu ngoprek, ngoding, dan tes produk langsung.',
+        majors: 'S1 Informatika, S1 Sistem dan Teknologi Rekayasa'
+      },
+      'THE STORYTELLER': {
+        name: 'THE STORYTELLER',
+        subtitle: 'S1 Desain Komunikasi Visual (DKV)',
+        color: 'from-fuchsia-500 to-pink-600',
+        badgeColor: 'border-fuchsia-500/40 bg-fuchsia-950/50 text-fuchsia-300 hover:border-fuchsia-400',
+        strength: 'Pikiran visual luar biasa, daya imajinasi tinggi, dan peka terhadap emosi audiens melalui karya estetika/kreatif.',
+        weakness: 'Mood-driven (kinerja bergantung suasana hati) dan mudah frustrasi jika dibatasi dengan regulasi yang terlalu kaku.',
+        insight: 'Bakat kreatifmu butuh wadah industri nyata. Kamu perlu jurusan yang mengasah estetikamu jadi portofolio komersial bernilai tinggi.',
+        majors: 'S1 Desain Komunikasi Visual (DKV), Desain Multimedia'
+      },
+      'THE CONNECTOR': {
+        name: 'THE CONNECTOR',
+        subtitle: 'S1 Komunikasi / Digital PR',
+        color: 'from-amber-400 to-orange-500',
+        badgeColor: 'border-amber-500/40 bg-amber-950/50 text-amber-300 hover:border-amber-400',
+        strength: 'Kecerdasan emosional tinggi, mudah beradaptasi, ahli menjalin relasi, dan mampu menyatukan berbagai karakter orang.',
+        weakness: 'Cenderung menghindari konflik langsung (people-pleaser) dan kadang kesulitan fokus pada pekerjaan detail sendirian.',
+        insight: 'Teknologi secanggih apa pun butuh manusia yang menyampaikannya. Nilai jualmu ada di kemampuan negosiasi dan komunikasi massa.',
+        majors: 'S1 Komunikasi Digital, Public Relations & Marketing'
+      },
+      'THE CATALYST': {
+        name: 'THE CATALYST',
+        subtitle: 'S1 Bisnis Digital & Startup',
+        color: 'from-indigo-400 to-purple-600',
+        badgeColor: 'border-indigo-500/40 bg-indigo-950/50 text-indigo-300 hover:border-indigo-400',
+        strength: 'Inisiatif tinggi, berani mengambil risiko terukur, proaktif, dan selalu punya dorongan kuat untuk mengubah ide jadi gerakan.',
+        weakness: 'Cenderung impulsif, mudah bosan pada urusan administrasi rutin setelah proyek berjalan stabil.',
+        insight: 'Kamu butuh tempat yang tidak mengekang insting kewirausahaanmu. Jurusan yang tepat adalah yang langsung menantangmu membangun proyek bisnis.',
+        majors: 'S1 Bisnis Digital, S1 Manajemen Kewirausahaan'
+      }
     };
 
-    // Buat QR Code otomatis yang mengarah ke file play.html
+    // Buat QR Code
     const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
     const playUrl = currentPath + 'play.html';
 
     new QRCode(document.getElementById("qrcode"), {
       text: playUrl,
-      width: 180,
-      height: 180,
+      width: 170,
+      height: 170,
       colorDark : "#000000",
       colorLight : "#ffffff",
       correctLevel : QRCode.CorrectLevel.M
@@ -110,17 +220,14 @@
 
     async function fetchData() {
       try {
-        const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
         
         document.getElementById('total-count').innerText = data.total || 0;
         renderBars(data.counts || {}, data.total || 0);
-        document.getElementById('sync-status').innerText = "Tersambung";
-        document.getElementById('sync-status').className = "text-emerald-400 font-bold";
+        renderAttendees(data.attendees || []);
       } catch (err) {
         console.error("Gagal sinkron data:", err);
-        document.getElementById('sync-status').innerText = "Menghubungkan...";
-        document.getElementById('sync-status').className = "text-amber-400 font-bold";
       }
     }
 
@@ -128,24 +235,24 @@
       const container = document.getElementById('archetype-list');
       container.innerHTML = '';
 
-      for (const [name, meta] of Object.entries(archetypeMeta)) {
+      for (const [name, meta] of Object.entries(archetypeData)) {
         const count = counts[name] || 0;
         const percent = total === 0 ? 0 : Math.round((count / total) * 100);
 
         const card = document.createElement('div');
-        card.className = "bg-slate-900/80 border border-slate-800 p-4 rounded-2xl shadow-md";
+        card.className = "bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl";
         card.innerHTML = `
-          <div class="flex justify-between items-center mb-2">
+          <div class="flex justify-between items-center mb-1.5 text-xs">
             <div>
-              <span class="text-base font-black text-white font-display tracking-wide">${name}</span>
-              <span class="text-xs text-slate-400 ml-2 font-mono">(${meta.subtitle})</span>
+              <span class="font-bold text-white font-display">${name}</span>
+              <span class="text-slate-400 ml-1 font-mono">(${meta.subtitle})</span>
             </div>
-            <div class="text-right">
-              <span class="text-lg font-black text-cyan-400 font-mono">${count}</span>
-              <span class="text-xs text-slate-500 font-mono ml-1">(${percent}%)</span>
+            <div>
+              <span class="font-bold text-cyan-400 font-mono">${count}</span>
+              <span class="text-slate-500 font-mono ml-1">(${percent}%)</span>
             </div>
           </div>
-          <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
+          <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
             <div class="h-full rounded-full bg-gradient-to-r ${meta.color} transition-all duration-700" style="width: ${percent}%"></div>
           </div>
         `;
@@ -153,7 +260,48 @@
       }
     }
 
-    // Eksekusi awal & refresh tiap 2.5 detik
+    function renderAttendees(attendees) {
+      const container = document.getElementById('attendees-feed');
+      if (!attendees || attendees.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Menunggu audiens menyelesaikan scan...</p>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      attendees.forEach(att => {
+        const meta = archetypeData[att.archetype] || archetypeData['THE STRATEGIST'];
+        const chip = document.createElement('button');
+        chip.className = `px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 ${meta.badgeColor}`;
+        chip.onclick = () => openSpotlight(att.name, att.archetype);
+        chip.innerHTML = `
+          <span class="font-bold text-white">${att.name}</span>
+          <span class="text-[10px] font-mono opacity-80 uppercase">→ ${att.archetype.replace('THE ', '')}</span>
+        `;
+        container.appendChild(chip);
+      });
+    }
+
+    // Modal Spotlight Handler
+    function openSpotlight(name, archetypeName) {
+      const p = archetypeData[archetypeName] || archetypeData['THE STRATEGIST'];
+      document.getElementById('modal-attendee-name').innerText = name;
+      document.getElementById('modal-archetype-tag').innerText = p.name;
+      document.getElementById('modal-strength').innerText = p.strength;
+      document.getElementById('modal-weakness').innerText = p.weakness;
+      document.getElementById('modal-insight').innerText = `"${p.insight}"`;
+      document.getElementById('modal-majors').innerText = p.majors;
+
+      document.getElementById('spotlight-modal').classList.remove('hidden');
+    }
+
+    function closeSpotlight() {
+      document.getElementById('spotlight-modal').classList.add('hidden');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") closeSpotlight();
+    });
+
     fetchData();
     setInterval(fetchData, 2500);
   </script>
