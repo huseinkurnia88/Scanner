@@ -6,7 +6,7 @@
   <title>Personality Scanner — HP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     body { 
@@ -43,7 +43,7 @@
       
       <input id="player-name" type="text" placeholder="Ketik nama panggilan kamu..." class="w-full px-4 py-3.5 rounded-xl bg-[#0c121e] border border-slate-700 text-white font-semibold text-center focus:outline-none focus:border-cyan-400 mb-4 shadow-inner" />
       <button onclick="submitName()" class="w-full py-3.5 bg-cyan-400 text-slate-950 font-bold rounded-xl active:scale-95 transition-transform shadow-lg shadow-cyan-400/20 tracking-wider text-sm">
-        MULAI SCAN (8 SOAL)
+        MULAI SCAN (12 SOAL)
       </button>
     </div>
 
@@ -51,11 +51,11 @@
     <div id="view-quiz" class="w-full max-w-md hidden flex flex-col justify-between h-[500px]">
       <div>
         <div class="flex justify-between items-center text-xs font-mono font-bold mb-2">
-          <span id="round-counter" class="text-cyan-400">RONDE 1 / 8</span>
+          <span id="round-counter" class="text-cyan-400">RONDE 1 / 12</span>
           <span class="text-slate-500">PILIH CEPAT</span>
         </div>
         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-6">
-          <div id="round-bar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 w-[12.5%]"></div>
+          <div id="round-bar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 w-[8.33%]"></div>
         </div>
       </div>
 
@@ -144,15 +144,56 @@
     let currentRound = 0;
     let scores = { analitis: 0, kreatif: 0, sosial: 0, teknikal: 0, leadership: 0 };
 
+    // 12 Pertanyaan Skenario Hidup
     const questions = [
-      { left: { text: "Grup chat kamu isinya ide bisnis", traits: { analitis: 2, leadership: 1 } }, right: { text: "Grup chat kamu isinya meme", traits: { kreatif: 2, sosial: 1 } } },
-      { left: { text: "Kalau ada masalah, kamu bikin plan", traits: { analitis: 2, teknikal: 1 } }, right: { text: "Kalau ada masalah, kamu langsung gerak", traits: { leadership: 2, kreatif: 1 } } },
-      { left: { text: "Kamu suka ngatur orang", traits: { leadership: 2, sosial: 1 } }, right: { text: "Kamu suka bikin sesuatu sendirian", traits: { teknikal: 2, kreatif: 1 } } },
-      { left: { text: "Story IG kamu isinya data/insight", traits: { analitis: 2, teknikal: 1 } }, right: { text: "Story IG kamu isinya visual/estetik", traits: { kreatif: 2, sosial: 1 } } },
-      { left: { text: "Kamu lebih suka nebak jawaban orang", traits: { sosial: 2, leadership: 1 } }, right: { text: "Kamu lebih suka nebak angka", traits: { analitis: 2, teknikal: 1 } } },
-      { left: { text: "Kalau kelompokan, kamu ambil keputusan", traits: { leadership: 2, analitis: 1 } }, right: { text: "Kamu jadi problem-solver teknis", traits: { teknikal: 2, analitis: 1 } } },
-      { left: { text: "Kamu suka barang rapi & terstruktur", traits: { analitis: 2, teknikal: 1 } }, right: { text: "Kamu suka barang random tapi jalan", traits: { kreatif: 2, sosial: 1 } } },
-      { left: { text: "Puas kalau orang lain terbantu", traits: { sosial: 2, leadership: 1 } }, right: { text: "Puas kalau target tercapai", traits: { leadership: 2, analitis: 1 } } }
+      { 
+        left: { text: "Grup chat kamu isinya ide bisnis / cuan", traits: { analitis: 2, leadership: 1 } }, 
+        right: { text: "Grup chat kamu isinya meme & stiker absurd", traits: { kreatif: 2, sosial: 1 } } 
+      },
+      { 
+        left: { text: "Kalau ada masalah, kamu bikin plan A & B", traits: { analitis: 2, teknikal: 1 } }, 
+        right: { text: "Kalau ada masalah, kamu langsung gerak dulu", traits: { leadership: 2, kreatif: 1 } } 
+      },
+      { 
+        left: { text: "Suka ngatur & ngebagi tugas ke orang lain", traits: { leadership: 2, sosial: 1 } }, 
+        right: { text: "Lebih suka bikin sesuatu fokus sendirian", traits: { teknikal: 2, kreatif: 1 } } 
+      },
+      { 
+        left: { text: "Story IG kamu isinya opini / insight / data", traits: { analitis: 2, leadership: 1 } }, 
+        right: { text: "Story IG kamu isinya visual / estetik / cinematic", traits: { kreatif: 2, sosial: 1 } } 
+      },
+      { 
+        left: { text: "Lebih jago nebak motif / emosi orang", traits: { sosial: 2, leadership: 1 } }, 
+        right: { text: "Lebih jago nebak pola angka & logika", traits: { analitis: 2, teknikal: 1 } } 
+      },
+      { 
+        left: { text: "Waktu kerja kelompok, kamu jadi juru bicara / penentu", traits: { leadership: 2, sosial: 1 } }, 
+        right: { text: "Waktu kerja kelompok, kamu jadi problem-solver teknis", traits: { teknikal: 2, analitis: 1 } } 
+      },
+      { 
+        left: { text: "Barang di meja harus rapi & terstruktur", traits: { analitis: 2, teknikal: 1 } }, 
+        right: { text: "Meja berantakan tapi kamu tahu posisi barangnya", traits: { kreatif: 2, sosial: 1 } } 
+      },
+      { 
+        left: { text: "Puas banget kalau teman terbantu & senang", traits: { sosial: 2, leadership: 1 } }, 
+        right: { text: "Puas banget kalau target & target angka tercapai", traits: { analitis: 2, leadership: 1 } } 
+      },
+      { 
+        left: { text: "Kalau beli gadget, ngecek spesifikasi prosesor & RAM", traits: { teknikal: 2, analitis: 1 } }, 
+        right: { text: "Kalau beli gadget, ngecek estetika desain & warna", traits: { kreatif: 2, sosial: 1 } } 
+      },
+      { 
+        left: { text: "Nonton YouTube isinya bedah bisnis, keuangan, atau podcast", traits: { analitis: 2, leadership: 1 } }, 
+        right: { text: "Nonton YouTube isinya tutorial coding, rakit PC, atau animasi", traits: { teknikal: 2, kreatif: 1 } } 
+      },
+      { 
+        left: { text: "Paling sebel sama sistem yang lambat & nggak efisien", traits: { teknikal: 2, analitis: 1 } }, 
+        right: { text: "Paling sebel sama desain banner yang jelek & norak", traits: { kreatif: 2, sosial: 1 } } 
+      },
+      { 
+        left: { text: "Pengen bikin brand / bisnis yang go internasional", traits: { leadership: 2, analitis: 1 } }, 
+        right: { text: "Pengen bikin karya / aplikasi yang dipakai jutaan orang", traits: { kreatif: 1, teknikal: 2 } } 
+      }
     ];
 
     const archetypeDetails = {
@@ -204,7 +245,7 @@
 
     function renderRound() {
       const q = questions[currentRound];
-      document.getElementById('round-counter').innerText = `RONDE ${currentRound + 1} / 8`;
+      document.getElementById('round-counter').innerText = `RONDE ${currentRound + 1} / ${questions.length}`;
       document.getElementById('round-bar').style.width = `${((currentRound + 1) / questions.length) * 100}%`;
       document.getElementById('opt-left-text').innerText = q.left.text;
       document.getElementById('opt-right-text').innerText = q.right.text;
