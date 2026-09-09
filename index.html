@@ -8,7 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-display { font-family: 'Space Grotesk', sans-serif; }
@@ -62,17 +62,17 @@
       </div>
     </div>
 
-    <!-- Kolom Kanan: Live Feed Peserta (Hanya Nama & Arketipe) -->
+    <!-- Kolom Kanan: Live Feed Peserta -->
     <div class="lg:col-span-8 bg-[#0b101b]/95 border border-slate-800 p-6 md:p-7 rounded-3xl shadow-2xl flex flex-col h-[520px]">
       <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800/80">
         <div>
           <h3 class="text-xl font-black font-display text-white tracking-wide">HASIL PESERTA (LIVE FEED)</h3>
-          <p class="text-xs text-slate-400">Klik nama peserta untuk memunculkan foto selfie & bedah profilnya!</p>
+          <p class="text-xs text-slate-400">Klik nama peserta untuk membuka Spotlight Foto Raksasa & Profil Lengkap!</p>
         </div>
         <span class="text-[11px] font-mono bg-cyan-950/80 border border-cyan-700/80 text-cyan-300 px-3 py-1 rounded-lg animate-pulse">Live</span>
       </div>
 
-      <!-- Container Chip Nama Peserta (Tanpa Foto) -->
+      <!-- Container Chip Nama Peserta -->
       <div id="attendees-feed" class="flex flex-wrap content-start gap-2.5 flex-1 overflow-y-auto pr-1">
         <p class="text-xs text-slate-500 italic py-4">Menunggu audiens menyelesaikan scan di HP...</p>
       </div>
@@ -80,66 +80,80 @@
 
   </main>
 
-  <!-- MODAL SPOTLIGHT (FOTO PESERTA HANYA TAMPIL DI SINI KETIKA DI-KLIK) -->
-  <div id="spotlight-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0b101b] border border-slate-700/80 rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative overflow-hidden">
+  <!-- MODAL SPOTLIGHT FOTO RAKSASA (EXTRA LARGE CINEMATIC MODAL) -->
+  <div id="spotlight-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-6 hidden">
+    <div class="bg-[#0b101b] border border-cyan-500/40 rounded-3xl max-w-5xl w-full p-6 md:p-8 shadow-[0_0_60px_rgba(6,182,212,0.25)] relative overflow-hidden flex flex-col max-h-[92vh]">
+      
       <!-- Close Button -->
-      <button onclick="closeSpotlight()" class="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-mono transition-colors">
+      <button onclick="closeSpotlight()" class="absolute top-5 right-5 z-20 text-slate-300 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-mono transition-colors border border-slate-700">
         ✕ TUTUP (ESC)
       </button>
 
-      <!-- Header Spotlight Peserta + Foto Selfie -->
-      <div class="flex flex-col sm:flex-row items-center gap-5 mb-6 text-center sm:text-left">
-        <!-- Frame Foto Selfie -->
-        <div class="relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-2 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.3)] bg-slate-900 flex items-center justify-center">
-          <img id="modal-photo" src="" class="w-full h-full object-cover hidden" alt="Foto Selfie" />
-          <div id="modal-photo-placeholder" class="w-full h-full flex items-center justify-center font-black text-2xl text-cyan-400 bg-[#072432]">
-            ?
+      <!-- Layout Split 2 Kolom: Kiri Foto Raksasa, Kanan Profil Analisis -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-stretch overflow-y-auto pr-1">
+        
+        <!-- KOLOM KIRI: FOTO HERO RAKSASA -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center">
+          <div class="relative w-full aspect-[3/4] max-h-[440px] rounded-3xl overflow-hidden border-4 border-cyan-400 shadow-[0_0_40px_rgba(6,182,212,0.4)] bg-slate-950 flex items-center justify-center">
+            <img id="modal-photo" src="" class="w-full h-full object-cover hidden" alt="Foto Peserta" />
+            <div id="modal-photo-placeholder" class="w-full h-full flex flex-col items-center justify-center font-black text-6xl text-cyan-400 bg-gradient-to-b from-[#072432] to-[#041118]">
+              <span id="modal-placeholder-char">?</span>
+              <span class="text-xs font-mono tracking-widest text-slate-400 mt-2 uppercase">No Photo</span>
+            </div>
           </div>
+          <p class="text-[11px] font-mono text-cyan-400 mt-3 uppercase tracking-widest">★ LIVE AUDIENCE SPOTLIGHT ★</p>
         </div>
 
-        <div>
-          <div class="inline-block text-[11px] font-mono uppercase tracking-widest text-cyan-400 bg-[#072432]/90 border border-cyan-700/60 px-3.5 py-1 rounded-full mb-1.5">
-            SPOTLIGHT PROFIL PESERTA
+        <!-- KOLOM KANAN: DETAIL PROFIL & REKOMENDASI JURUSAN -->
+        <div class="md:col-span-7 flex flex-col justify-between space-y-4 text-left">
+          
+          <!-- Header Nama & Arketipe -->
+          <div>
+            <div class="inline-block text-[11px] font-mono uppercase tracking-widest text-cyan-400 bg-[#072432]/90 border border-cyan-700/60 px-3.5 py-1 rounded-full mb-2">
+              PROFIL KEPRIBADIAN
+            </div>
+            <h2 id="modal-attendee-name" class="text-3xl md:text-5xl font-black text-white tracking-tight font-display leading-tight">Nama Peserta</h2>
+            <p id="modal-archetype-tag" class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-blue-400 font-display mt-0.5">THE STRATEGIST</p>
           </div>
-          <h2 id="modal-attendee-name" class="text-3xl font-black text-white font-display">Nama Peserta</h2>
-          <p id="modal-archetype-tag" class="text-xl font-black text-cyan-400 font-display">THE STRATEGIST</p>
+
+          <!-- Strengths & Weaknesses Split -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="bg-[#091f24]/70 border border-emerald-500/40 p-4 rounded-2xl">
+              <p class="font-bold text-emerald-400 uppercase tracking-wide mb-1 flex items-center gap-1.5 text-[11px]">
+                <span>⚡</span> KEKUATAN UTAMA
+              </p>
+              <p id="modal-strength" class="text-slate-200 leading-relaxed text-xs"></p>
+            </div>
+
+            <div class="bg-[#241914]/70 border border-amber-500/40 p-4 rounded-2xl">
+              <p class="font-bold text-amber-400 uppercase tracking-wide mb-1 flex items-center gap-1.5 text-[11px]">
+                <span>⚠️</span> TITIK BUTA / KELEMAHAN
+              </p>
+              <p id="modal-weakness" class="text-slate-200 leading-relaxed text-xs"></p>
+            </div>
+          </div>
+
+          <!-- Punchline Insight -->
+          <div class="p-4 rounded-2xl bg-[#091b26]/80 border border-cyan-900/80">
+            <p class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold mb-1">PUNCHLINE INSIGHT</p>
+            <p id="modal-insight" class="text-slate-200 text-xs md:text-sm italic leading-relaxed"></p>
+          </div>
+
+          <!-- Major Direction -->
+          <div class="bg-[#070d18] border border-slate-800 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-0.5">ARAH JURUSAN DI INSTITUT ASIA:</p>
+              <p id="modal-majors" class="text-base font-bold text-cyan-300"></p>
+            </div>
+            <a href="https://asia.ac.id" target="_blank" class="px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-xs rounded-xl whitespace-nowrap shadow-lg shadow-cyan-400/20 transition-colors">
+              Lihat Info Kampus
+            </a>
+          </div>
+
         </div>
+
       </div>
 
-      <!-- Strengths & Weaknesses Split -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3.5 text-xs">
-        <div class="bg-[#091f24]/60 border border-emerald-500/30 p-4 rounded-2xl">
-          <p class="font-bold text-emerald-400 uppercase tracking-wide mb-1.5 flex items-center gap-1.5 text-[11px]">
-            <span>⚡</span> KEKUATAN UTAMA
-          </p>
-          <p id="modal-strength" class="text-slate-200 text-xs leading-relaxed"></p>
-        </div>
-
-        <div class="bg-[#241914]/60 border border-amber-500/30 p-4 rounded-2xl">
-          <p class="font-bold text-amber-400 uppercase tracking-wide mb-1.5 flex items-center gap-1.5 text-[11px]">
-            <span>⚠️</span> TITIK BUTA / KELEMAHAN
-          </p>
-          <p id="modal-weakness" class="text-slate-200 text-xs leading-relaxed"></p>
-        </div>
-      </div>
-
-      <!-- Punchline Insight -->
-      <div class="p-4 rounded-2xl bg-[#091b26]/70 border border-cyan-900/70 mb-4">
-        <p class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold mb-1">PUNCHLINE INSIGHT</p>
-        <p id="modal-insight" class="text-slate-200 text-xs italic leading-relaxed"></p>
-      </div>
-
-      <!-- Major Direction -->
-      <div class="bg-[#070d18] border border-slate-800/90 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-3">
-        <div>
-          <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-0.5">ARAH JURUSAN TERBAIK DI INSTITUT ASIA:</p>
-          <p id="modal-majors" class="text-sm font-bold text-cyan-300"></p>
-        </div>
-        <a href="https://asia.ac.id" target="_blank" class="px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-xs rounded-xl whitespace-nowrap shadow-lg shadow-cyan-400/20 transition-colors">
-          Lihat Info Kampus
-        </a>
-      </div>
     </div>
   </div>
 
@@ -229,7 +243,6 @@
       attendees.forEach(att => {
         const meta = archetypeData[att.archetype] || archetypeData['THE STRATEGIST'];
         const chip = document.createElement('button');
-        // Hanya nama dan badge, TANPA foto di daftar luar
         chip.className = `px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 shadow-sm ${meta.badgeColor}`;
         chip.onclick = () => openSpotlight(att.name, att.archetype, att.photo);
         chip.innerHTML = `
@@ -240,7 +253,7 @@
       });
     }
 
-    // Modal Spotlight Handler: Foto hanya muncul di sini saat di-klik
+    // Modal Spotlight Handler: Render Foto Raksasa
     function openSpotlight(name, archetypeName, photoBase64) {
       const p = archetypeData[archetypeName] || archetypeData['THE STRATEGIST'];
       document.getElementById('modal-attendee-name').innerText = name;
@@ -252,6 +265,7 @@
 
       const photoImg = document.getElementById('modal-photo');
       const placeholder = document.getElementById('modal-photo-placeholder');
+      const placeholderChar = document.getElementById('modal-placeholder-char');
 
       if (photoBase64 && photoBase64.startsWith('data:image')) {
         photoImg.src = photoBase64;
@@ -259,7 +273,7 @@
         placeholder.classList.add('hidden');
       } else {
         photoImg.classList.add('hidden');
-        placeholder.innerText = name.charAt(0).toUpperCase();
+        placeholderChar.innerText = name.charAt(0).toUpperCase();
         placeholder.classList.remove('hidden');
       }
 
