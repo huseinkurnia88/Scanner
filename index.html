@@ -60,7 +60,7 @@
     </div>
   </header>
 
-  <!-- Main Grid: QR Box diperlebar ke 5 Kolom agar QR Code bisa raksasa -->
+  <!-- Main Grid: QR Box Jumbo (5 Kolom) & Live Feed Peserta (7 Kolom) -->
   <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-6 max-w-7xl mx-auto w-full items-stretch">
     
     <!-- Kolom Kiri: QR Code Box Jumbo -->
@@ -226,7 +226,6 @@
     const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
     const playUrl = currentPath + 'play.html';
 
-    // UKURAN QR CODE DINAIKKAN KE 270x270 PX (JUMBO)
     new QRCode(document.getElementById("qrcode"), {
       text: playUrl,
       width: 270,
