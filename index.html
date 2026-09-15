@@ -20,7 +20,7 @@
     }
   </style>
 </head>
-<body class="bg-[#070b12] text-slate-100 min-h-screen p-6 md:p-8 flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black bg-grid">
+<body class="bg-[#070b12] text-slate-100 min-h-screen p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black bg-grid">
 
   <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
     <div class="absolute top-1/4 -left-20 w-80 h-80 bg-cyan-600/15 rounded-full blur-[120px]"></div>
@@ -28,8 +28,8 @@
   </div>
 
   <!-- Header dengan Logo Resmi Institut Asia -->
-  <header class="flex justify-between items-center border-b border-slate-800/80 pb-4 max-w-7xl mx-auto w-full gap-4">
-    <div class="flex items-center gap-4 md:gap-6">
+  <header class="flex justify-between items-center border-b border-slate-800/80 pb-3 max-w-7xl mx-auto w-full gap-4">
+    <div class="flex items-center gap-3 md:gap-5">
       <div class="flex items-center">
         <img 
           src="logo-asia.jpg" 
@@ -45,66 +45,65 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-          <h1 class="text-base sm:text-xl md:text-2xl font-black tracking-wider font-display uppercase text-white leading-tight">LIVE PERSONALITY ARENA</h1>
+          <h1 class="text-base sm:text-lg md:text-xl font-black tracking-wider font-display uppercase text-white leading-tight">LIVE PERSONALITY ARENA</h1>
         </div>
-        <p class="text-[11px] text-slate-400 font-mono tracking-widest uppercase mt-0.5">Interactive Student Mapping Scanner</p>
+        <p class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Interactive Student Mapping Scanner</p>
       </div>
     </div>
 
     <!-- Total Responden Counter -->
     <div class="flex items-center gap-4 shrink-0">
-      <div class="bg-[#0b101b] border border-slate-700/80 px-4 md:px-5 py-2 rounded-2xl text-right shadow-lg">
-        <span class="text-[10px] text-slate-400 block uppercase font-mono tracking-wider">Total Responden</span>
+      <div class="bg-[#0b101b] border border-slate-700/80 px-4 md:px-5 py-1.5 rounded-2xl text-right shadow-lg">
+        <span class="text-[9px] text-slate-400 block uppercase font-mono tracking-wider">Total Responden</span>
         <span id="total-count" class="text-2xl font-black text-cyan-400 font-mono leading-none">0</span>
       </div>
     </div>
   </header>
 
-  <!-- Main Grid -->
-  <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-6 max-w-7xl mx-auto w-full items-stretch">
+  <!-- Main Grid: Layout Seimbang 6 : 6 Agar QR Code Bisa Ekstra Besar -->
+  <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-4 max-w-7xl mx-auto w-full items-stretch">
     
-    <!-- Kolom Kiri: QR Code Box Jumbo & Mode Switcher -->
-    <div class="lg:col-span-5 bg-[#0b101b]/95 border border-slate-800 p-6 md:p-8 rounded-3xl text-center shadow-2xl flex flex-col justify-between">
+    <!-- Kolom Kiri: QR Code Box Raksasa (6 Kolom) -->
+    <div class="lg:col-span-6 bg-[#0b101b]/95 border border-slate-800 p-5 md:p-6 rounded-3xl text-center shadow-2xl flex flex-col justify-between">
       <div>
-        <!-- PENGATUR JUMLAH SOAL -->
-        <div class="mb-4">
-          <p class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Mode Durasi Kuis:</p>
+        <!-- Mode Switcher -->
+        <div class="mb-3">
           <div class="inline-flex p-1 bg-slate-950 border border-slate-800 rounded-2xl gap-1">
-            <button id="btn-mode-10" onclick="setQuestionLimit(10)" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20">
+            <button id="btn-mode-10" onclick="setQuestionLimit(10)" class="px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20">
               ⚡ 10 Soal (Cepat)
             </button>
-            <button id="btn-mode-18" onclick="setQuestionLimit(18)" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all">
+            <button id="btn-mode-18" onclick="setQuestionLimit(18)" class="px-4 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all">
               🎯 18 Soal (Lengkap)
             </button>
           </div>
         </div>
 
-        <h2 class="text-2xl md:text-3xl font-black font-display text-white mb-1">SCAN QR PAKAI HP MU</h2>
-        <p id="qr-info-text" class="text-cyan-400 text-xs font-mono mb-4">Mode Aktif: 10 Pertanyaan Singkat</p>
+        <h2 class="text-2xl md:text-3xl font-black font-display text-white mb-0.5">SCAN QR PAKAI HP MU</h2>
+        <p id="qr-info-text" class="text-cyan-400 text-xs font-mono mb-3">Mode Aktif: 10 Pertanyaan Singkat</p>
         
-        <!-- Frame Putih QR Code JUMBO -->
-        <div class="bg-white p-4 rounded-3xl inline-block shadow-[0_0_35px_rgba(255,255,255,0.15)] mx-auto mb-4">
-          <div id="qrcode" class="flex items-center justify-center"></div>
+        <!-- Frame Putih QR Code JUMBO EKSTRA BESAR (360px - 380px) -->
+        <div class="bg-white p-3 md:p-4 rounded-3xl inline-flex items-center justify-center shadow-[0_0_45px_rgba(255,255,255,0.2)] mx-auto mb-2">
+          <div id="qrcode" class="flex items-center justify-center overflow-hidden"></div>
         </div>
       </div>
 
-      <div class="bg-[#070d18] border border-slate-800/90 p-3 rounded-2xl text-xs font-mono text-slate-400">
+      <div class="bg-[#070d18] border border-slate-800/90 py-2 px-4 rounded-xl text-[11px] font-mono text-slate-400 mt-2">
         Status Database: <span id="sync-status" class="text-emerald-400 font-bold">Terhubung</span>
       </div>
     </div>
 
-    <!-- Kolom Kanan: Live Feed Peserta -->
-    <div class="lg:col-span-7 bg-[#0b101b]/95 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col h-[580px]">
-      <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800/80">
+    <!-- Kolom Kanan: Live Feed Peserta (6 Kolom) -->
+    <div class="lg:col-span-6 bg-[#0b101b]/95 border border-slate-800 p-5 md:p-6 rounded-3xl shadow-2xl flex flex-col h-[560px] lg:h-[620px]">
+      <div class="flex justify-between items-center mb-3 pb-2.5 border-b border-slate-800/80">
         <div>
-          <h3 class="text-xl font-black font-display text-white tracking-wide">HASIL PESERTA (LIVE FEED)</h3>
-          <p class="text-xs text-slate-400">Klik nama peserta untuk membuka Spotlight!</p>
+          <h3 class="text-lg md:text-xl font-black font-display text-white tracking-wide">HASIL PESERTA (LIVE FEED)</h3>
+          <p class="text-xs text-slate-400">Klik nama peserta untuk membuka Spotlight & Foto!</p>
         </div>
-        <span class="text-[11px] font-mono bg-cyan-950/80 border border-cyan-700/80 text-cyan-300 px-3 py-1 rounded-lg animate-pulse">Live</span>
+        <span class="text-[10px] font-mono bg-cyan-950/80 border border-cyan-700/80 text-cyan-300 px-2.5 py-1 rounded-lg animate-pulse">Live</span>
       </div>
 
       <!-- Container Chip Nama Peserta -->
-      <div id="attendees-feed" class="flex flex-wrap content-start gap-2.5 flex-1 overflow-y-auto pr-1">
+      <div id="attendees-feed" class="flex flex-wrap content-start gap-2 flex-1 overflow-y-auto pr-1">
         <p class="text-xs text-slate-500 italic py-4">Menunggu audiens menyelesaikan scan di HP...</p>
       </div>
     </div>
@@ -182,7 +181,7 @@
     </div>
   </div>
 
-  <footer class="text-center text-xs text-slate-500 font-mono border-t border-slate-900 pt-4 max-w-7xl mx-auto w-full flex justify-between items-center">
+  <footer class="text-center text-[11px] text-slate-500 font-mono border-t border-slate-900 pt-3 max-w-7xl mx-auto w-full flex justify-between items-center">
     <span>Platform Presentasi Interaktif — Institut Asia Malang</span>
     <span class="text-[10px] text-slate-600">Auto-refresh 2500ms</span>
   </footer>
@@ -235,18 +234,19 @@
 
     let selectedLimit = 10;
 
+    // FUNGSI RENDER QR CODE UKURAN BESAR (350px)
     function renderQRCode(limit) {
       const currentUrl = window.location.href.split('?')[0];
       const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
       const playUrl = `${basePath}play.html?limit=${limit}`;
 
       const qrContainer = document.getElementById("qrcode");
-      qrContainer.innerHTML = ""; // Bersihkan elemen canvas/gambar sebelumnya
+      qrContainer.innerHTML = "";
 
       new QRCode(qrContainer, {
         text: playUrl,
-        width: 270,
-        height: 270,
+        width: 350,
+        height: 350,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
@@ -260,19 +260,19 @@
       const infoText = document.getElementById('qr-info-text');
 
       if (limit === 10) {
-        btn10.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20";
-        btn18.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all";
+        btn10.className = "px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20";
+        btn18.className = "px-4 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all";
         infoText.innerText = "Mode Aktif: 10 Pertanyaan Singkat";
       } else {
-        btn18.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20";
-        btn10.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all";
+        btn18.className = "px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20";
+        btn10.className = "px-4 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all";
         infoText.innerText = "Mode Aktif: 18 Pertanyaan Lengkap";
       }
 
       renderQRCode(limit);
     }
 
-    // Inisialisasi QR Code awal
+    // Inisialisasi awal
     renderQRCode(selectedLimit);
 
     async function fetchData() {
