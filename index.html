@@ -66,7 +66,7 @@
     <!-- Kolom Kiri: QR Code Box Jumbo & Mode Switcher -->
     <div class="lg:col-span-5 bg-[#0b101b]/95 border border-slate-800 p-6 md:p-8 rounded-3xl text-center shadow-2xl flex flex-col justify-between">
       <div>
-        <!-- FITUR BARU: PILIH JUMLAH SOAL -->
+        <!-- PENGATUR JUMLAH SOAL -->
         <div class="mb-4">
           <p class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Mode Durasi Kuis:</p>
           <div class="inline-flex p-1 bg-slate-950 border border-slate-800 rounded-2xl gap-1">
@@ -233,27 +233,26 @@
       }
     };
 
-    let selectedLimit = 10; // Default 10 Soal
-    let qrInstance = null;
+    let selectedLimit = 10;
 
     function renderQRCode(limit) {
-      const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-      const playUrl = `${currentPath}play.html?limit=${limit}`;
+      const currentUrl = window.location.href.split('?')[0];
+      const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+      const playUrl = `${basePath}play.html?limit=${limit}`;
 
       const qrContainer = document.getElementById("qrcode");
-      qrContainer.innerHTML = ""; // Bersihkan QR sebelumnya
+      qrContainer.innerHTML = ""; // Bersihkan elemen canvas/gambar sebelumnya
 
-      qrInstance = new QRCode(qrContainer, {
+      new QRCode(qrContainer, {
         text: playUrl,
         width: 270,
         height: 270,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.M
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
       });
     }
 
-    // Fungsi Pengatur Opsi Soal (Dipanggil saat presenter klik tombol)
     function setQuestionLimit(limit) {
       selectedLimit = limit;
       const btn10 = document.getElementById('btn-mode-10');
@@ -270,11 +269,10 @@
         infoText.innerText = "Mode Aktif: 18 Pertanyaan Lengkap";
       }
 
-      // Re-generate QR Code seketika dengan parameter limit yang baru
       renderQRCode(limit);
     }
 
-    // Render QR Code awal (Default 10)
+    // Inisialisasi QR Code awal
     renderQRCode(selectedLimit);
 
     async function fetchData() {
