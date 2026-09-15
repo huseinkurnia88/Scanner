@@ -50,7 +50,7 @@
     <div id="view-quiz" class="w-full max-w-md hidden flex flex-col justify-between h-[500px]">
       <div>
         <div class="flex justify-between items-center text-xs font-mono font-bold mb-2">
-          <span id="round-counter" class="text-cyan-400">RONDE 1 / 18</span>
+          <span id="round-counter" class="text-cyan-400">RONDE 1 / 10</span>
           <span class="text-slate-500">PILIH CEPAT</span>
         </div>
         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-6">
@@ -80,7 +80,6 @@
         <h2 class="text-2xl font-black text-white font-display mb-1">AMBIL FOTO SELFIE</h2>
         <p class="text-xs text-slate-400 mb-6">Foto kamu akan muncul besar di layar proyektor saat profilmu dibahas!</p>
 
-        <!-- Preview Box (Portrait 3:4) -->
         <div class="relative w-44 aspect-[3/4] mx-auto mb-6">
           <div id="selfie-placeholder" class="w-full h-full rounded-2xl border-2 border-dashed border-cyan-400/60 flex flex-col items-center justify-center bg-slate-900 text-slate-400 overflow-hidden p-3">
             <svg class="w-12 h-12 mb-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,6 +165,10 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyeBih6XjCoBUlnsHn2sFmTB0ecqbRjRTH40SyCykPaazG0wT7UyeGhwLbNSE7Z_aLo/exec";
 
+    // BACA PARAMETER LIMIT DARI URL (CONTOH: play.html?limit=10)
+    const urlParams = new URLSearchParams(window.location.search);
+    const questionLimit = parseInt(urlParams.get('limit')) || 10;
+
     let playerName = "";
     let currentRound = 0;
     let scores = { analitis: 0, kreatif: 0, sosial: 0, teknikal: 0, leadership: 0 };
@@ -198,40 +201,40 @@
         name: "THE STRATEGIST",
         strength: "Sangat piawai menyusun strategi jangka panjang, membaca arah tren, dan merancang perencanaan yang terstruktur.",
         weakness: 'Sering terjebak di "overthinking" (analysis paralysis). Terlalu banyak bikin plan sampai sering menunda langkah eksekusi nyata.',
-        insight: 'Yang kamu butuhkan bukan jurusan teori yang lambat, tapi lingkungan yang melatih kamu mengambil keputusan cepat di bawah tekanan.',
+        insight: '"Yang kamu butuhkan bukan jurusan teori yang lambat, tapi lingkungan yang melatih kamu mengambil keputusan cepat di bawah tekanan."',
         majors: "Akuntansi, Professional Business Management"
       },
       teknikal: {
         name: "THE BUILDER",
         strength: "Logika problem-solving tajam, tekun mencari solusi teknis, dan sangat senang menciptakan produk nyata yang berfungsi.",
         weakness: "Cepat bosan dengan obrolan teoritis/diplomatis, dan terkadang kurang sabar ketika harus menjelaskan hal teknis ke orang awam.",
-        insight: 'Kamu bakal layu kalau cuma disuruh menghafal materi. Kamu butuh ekosistem laboratorium yang membebaskanmu ngoprek, ngoding, dan tes produk langsung.',
+        insight: '"Kamu bakal layu kalau cuma disuruh menghafal materi. Kamu butuh ekosistem laboratorium yang membebaskanmu ngoprek, ngoding, dan tes produk langsung."',
         majors: "Teknik Informatika, Sistem Komputer"
       },
       kreatif: {
         name: "THE STORYTELLER",
         strength: "Pikiran visual luar biasa, daya imajinasi tinggi, dan peka terhadap emosi audiens melalui karya estetika/kreatif.",
         weakness: "Mood-driven (kinerja bergantung suasana hati) dan mudah frustrasi jika dibatasi dengan regulasi yang terlalu kaku.",
-        insight: 'Bakat kreatifmu butuh wadah industri nyata. Kamu perlu jurusan yang mengasah estetikamu jadi portofolio komersial bernilai tinggi.',
+        insight: '"Bakat kreatifmu butuh wadah industri nyata. Kamu perlu jurusan yang mengasah estetikamu jadi portofolio komersial bernilai tinggi."',
         majors: "Desain Komunikasi Visual"
       },
       sosial: {
         name: "THE CONNECTOR",
         strength: "Kecerdasan emosional tinggi, mudah beradaptasi, ahli menjalin relasi, dan mampu menyatukan berbagai karakter orang.",
         weakness: "Cenderung menghindari konflik langsung (people-pleaser) dan kadang kesulitan fokus pada pekerjaan detail sendirian.",
-        insight: 'Teknologi secanggih apa pun butuh manusia yang menyampaikannya. Nilai jualmu ada di kemampuan negosiasi dan komunikasi bisnis global.',
+        insight: '"Teknologi secanggih apa pun butuh manusia yang menyampaikannya. Nilai jualmu ada di kemampuan negosiasi dan komunikasi bisnis global."',
         majors: "Professional Business Management, International Business Management"
       },
       leadership: {
         name: "THE CATALYST",
         strength: "Inisiatif tinggi, berani mengambil risiko terukur, proaktif, dan selalu punya dorongan kuat untuk mengubah ide jadi gerakan nyata.",
         weakness: "Cenderung impulsif, mudah bosan pada urusan administrasi rutin setelah proyek berjalan stabil.",
-        insight: 'Kamu butuh tempat yang tidak mengekang insting kepemimpinanmu. Jurusan yang tepat adalah yang langsung menantangmu membangun proyek bisnis & inovasi teknologi sejak kuliah.',
+        insight: '"Kamu butuh tempat yang tidak mengekang insting kepemimpinanmu. Jurusan yang tepat adalah yang langsung menantangmu membangun proyek bisnis & inovasi teknologi sejak kuliah."',
         majors: "International Business Management, Teknik Informatika"
       }
     };
 
-    // Ambil soal secara live dari Spreadsheet begitu aplikasi dibuka
+    // Ambil soal dari Spreadsheet dan POTONG sesuai limit yang dipilih presenter
     async function loadQuestionsFromSheet() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getQuestions`);
@@ -242,6 +245,10 @@
       } catch (e) {
         console.log("Menggunakan bank soal bawaan:", e);
       } finally {
+        // Potong jumlah soal sesuai parameter limit (10 atau 18)
+        if (questions.length > questionLimit) {
+          questions = questions.slice(0, questionLimit);
+        }
         document.getElementById('btn-start').innerText = `MULAI SCAN (${questions.length} SOAL)`;
       }
     }
