@@ -66,7 +66,7 @@
   <!-- Main Grid: Layout Seimbang 6 : 6 -->
   <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-4 max-w-7xl mx-auto w-full items-stretch">
     
-    <!-- Kolom Kiri: QR Code Box -->
+    <!-- Kolom Kiri: QR Code Box Raksasa -->
     <div class="lg:col-span-6 bg-[#0b101b]/95 border border-slate-800 p-5 md:p-6 rounded-3xl text-center shadow-2xl flex flex-col justify-between">
       <div>
         <!-- Mode Switcher -->
@@ -84,7 +84,7 @@
         <h2 class="text-2xl md:text-3xl font-black font-display text-white mb-0.5">SCAN QR PAKAI HP MU</h2>
         <p id="qr-info-text" class="text-cyan-400 text-xs font-mono mb-3">Mode Aktif: 10 Pertanyaan Singkat</p>
         
-        <!-- Frame QR Code JUMBO -->
+        <!-- Frame Putih QR Code JUMBO EKSTRA BESAR (350px) -->
         <div class="bg-white p-3 md:p-4 rounded-3xl inline-flex items-center justify-center shadow-[0_0_45px_rgba(255,255,255,0.2)] mx-auto mb-2">
           <div id="qrcode" class="flex items-center justify-center overflow-hidden"></div>
         </div>
@@ -130,7 +130,7 @@
             <img id="modal-photo" src="" class="w-full h-full object-cover hidden" alt="Foto Peserta" />
             <div id="modal-photo-placeholder" class="w-full h-full flex flex-col items-center justify-center font-black text-6xl text-cyan-400 bg-gradient-to-b from-[#072432] to-[#041118]">
               <span id="modal-placeholder-char">?</span>
-              <span class="text-xs font-mono tracking-widest text-slate-400 mt-2 uppercase">No Photo</span>
+              <span class="text-xs font-mono tracking-widest text-slate-400 mt-2 uppercase">Memuat Foto...</span>
             </div>
           </div>
           <p class="text-[11px] font-mono text-cyan-400 mt-3 uppercase tracking-widest">★ LIVE AUDIENCE SPOTLIGHT ★</p>
@@ -185,7 +185,7 @@
 
   <footer class="text-center text-[11px] text-slate-500 font-mono border-t border-slate-900 pt-3 max-w-7xl mx-auto w-full flex justify-between items-center">
     <span>Platform Presentasi Interaktif — Institut Asia Malang</span>
-    <span class="text-[10px] text-slate-600">Auto-refresh 2500ms</span>
+    <span class="text-[10px] text-slate-600">Auto-refresh 3500ms</span>
   </footer>
 
   <script>
@@ -235,8 +235,8 @@
     };
 
     let selectedLimit = 10;
-    // Penyimpanan data lokal untuk mencegah error saat parsing karakter di HTML
     let currentAttendeesList = [];
+    let isFetching = false;
 
     function renderQRCode(limit) {
       const currentUrl = window.location.href.split('?')[0];
@@ -278,8 +278,10 @@
     renderQRCode(selectedLimit);
 
     async function fetchData() {
+      if (isFetching) return;
+      isFetching = true;
+
       try {
-        // Gunakan timestamp query parameter agar browser TIDAK menyimpan cache
         const cacheBuster = `_t=${new Date().getTime()}`;
         const res = await fetch(`${SCRIPT_URL}?${cacheBuster}`);
         const data = await res.json();
@@ -288,12 +290,16 @@
         document.getElementById('sync-status').innerText = "Terhubung";
         document.getElementById('sync-status').className = "text-emerald-400 font-bold";
 
-        currentAttendeesList = data.attendees || [];
-        renderAttendees(currentAttendeesList);
+        if (JSON.stringify(currentAttendeesList) !== JSON.stringify(data.attendees || [])) {
+          currentAttendeesList = data.attendees || [];
+          renderAttendees(currentAttendeesList);
+        }
       } catch (err) {
         console.error("Gagal sinkron data:", err);
         document.getElementById('sync-status').innerText = "Koneksi Ulang...";
         document.getElementById('sync-status').className = "text-amber-400 font-bold";
+      } finally {
+        isFetching = false;
       }
     }
 
@@ -309,7 +315,6 @@
         const meta = archetypeData[att.archetype] || archetypeData['THE STRATEGIST'];
         const chip = document.createElement('button');
         chip.className = `px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all active:scale-95 shadow-sm ${meta.badgeColor}`;
-        // Panggil berdasarkan index agar aman dari string foto yang sangat panjang
         chip.onclick = () => openSpotlightByIndex(index);
         chip.innerHTML = `
           <span class="font-bold text-white">${att.name}</span>
@@ -319,7 +324,7 @@
       });
     }
 
-    function openSpotlightByIndex(index) {
+    async function openSpotlightByIndex(index) {
       const att = currentAttendeesList[index];
       if (!att) return;
 
@@ -335,17 +340,24 @@
       const placeholder = document.getElementById('modal-photo-placeholder');
       const placeholderChar = document.getElementById('modal-placeholder-char');
 
-      if (att.photo && att.photo.toString().startsWith('data:image')) {
-        photoImg.src = att.photo;
-        photoImg.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-      } else {
-        photoImg.classList.add('hidden');
-        placeholderChar.innerText = (att.name && att.name.length > 0) ? att.name.charAt(0).toUpperCase() : '?';
-        placeholder.classList.remove('hidden');
-      }
+      photoImg.classList.add('hidden');
+      placeholderChar.innerText = (att.name && att.name.length > 0) ? att.name.charAt(0).toUpperCase() : '?';
+      placeholder.classList.remove('hidden');
 
       document.getElementById('spotlight-modal').classList.remove('hidden');
+
+      // Ambil foto secara spesifik hanya untuk peserta yang sedang diklik (Lazy Load)
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getPhoto&row=${att.row}`);
+        const data = await res.json();
+        if (data.photo && data.photo.startsWith('data:image')) {
+          photoImg.src = data.photo;
+          photoImg.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+        }
+      } catch (e) {
+        console.log("Foto gagal dimuat / tanpa foto:", e);
+      }
     }
 
     function closeSpotlight() {
@@ -356,9 +368,8 @@
       if (e.key === "Escape") closeSpotlight();
     });
 
-    // Panggil langsung saat halaman termuat
     fetchData();
-    setInterval(fetchData, 2500);
+    setInterval(fetchData, 3500);
   </script>
 </body>
 </html>
